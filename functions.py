@@ -63,6 +63,41 @@ def pre_process_dataframe(filename, **kwargs):
 
     return dataframe
 
+
+def print_frequency_report(frequency_dataframe):
+
+    freq_num = frequency_dataframe.sort_values()
+    freq_num2 = freq_num.reset_index()
+
+    menos = []
+    mais = []
+
+    bold = '\033[1m'
+    clear = '\033[m'         
+
+    print(f'{bold}OS NÚMEROS QUE MAIS APARECERAM FORAM:{clear}\n')
+
+    for i in range(59, 53, -1):
+        print(f'{bold}{freq_num2["Numero"][i]}{clear} que apareceu em {bold}{freq_num2["Concurso"][i]}{clear} sorteios')
+        mais.append(freq_num2["Numero"][i])
+
+    print()
+    print(f'{bold}OS NÚMEROS QUE MENOS APARECERAM FORAM:{clear}\n')
+
+    for i in range(6):
+        print(f'{bold}{freq_num2["Numero"][i]}{clear} que apareceu em {bold}{freq_num2["Concurso"][i]}{clear} sorteios')
+        menos.append(freq_num2["Numero"][i])
+
+    # Formatando os jogos com números mais e menos frequentes para futura avaliação
+
+    mais.sort()
+    menos.sort()
+
+    print()                                                                                                        
+    print(f'Jogo com números mais frequentes: {mais}')
+    print(f'Jogo com números menos frequentes: {menos}')  
+
+
 if __name__ == "__main__":
 
     save_path = get_working_dir_path()
