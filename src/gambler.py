@@ -9,7 +9,6 @@ from threading import Thread
 from threading import Lock
 
 
-
 class Gambler(Thread):
 
     def __init__(self, numbers_range, numbers_amount, trials, samples):
@@ -26,14 +25,21 @@ class Gambler(Thread):
         super().__init__()
 
     def run(self):
-        pass
+        
+        for i in self.samples:
+
+            yield self.gambler()
 
 
-    def _generate_cards(self):
-        pass
+    def gambler(self):
+
+        for i in range(tqdm(self.trials)):
+
+            yield random.sample(range(self.numbers_range), self.numbers_amount)
+            
 
 
-    def _do_raffle(self):
+    def check_results(self):
         pass
 
 
