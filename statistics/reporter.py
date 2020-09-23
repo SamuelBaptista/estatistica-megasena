@@ -1,8 +1,11 @@
+from os import stat
 from pandas import Series
 from collections import Counter
 
 from numpy import mean
 from numpy import int64
+
+import matplotlib.pyplot as plt
 
 class Reporter:
 
@@ -32,8 +35,16 @@ class Reporter:
             number_list.append(counter[number])
 
         return number_list
-        
 
+    @staticmethod
+    def show_probabilities_table():
+        prob_table = plt.imread("probabilities_table.png")
+        plt.figure(figsize=(10,10))
+        plt.axis('off')
+        plt.tight_layout()        
+        plt.imshow(prob_table)
+
+        
     def number_bootstrap_report(self, number, confidence):
 
         up = 1-((1-confidence)/2)

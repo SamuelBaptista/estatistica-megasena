@@ -5,13 +5,10 @@ import os
 
 import pandas as pd
 
-from config import DOWNLOAD_PATH, FILENAME
-
 
 def get_working_dir_path():
 
     return os.getcwd()
-
 
 
 def download_raffle_file(url, path, filename):
@@ -95,19 +92,4 @@ def print_frequency_report(frequency_dataframe):
 
     print()                                                                                                        
     print(f'Jogo com números mais frequentes: {mais}')
-    print(f'Jogo com números menos frequentes: {menos}')  
-
-
-if __name__ == "__main__":
-
-    save_path = get_working_dir_path()
-
-    download_raffle_file(url=DOWNLOAD_PATH,
-                         path=save_path,
-                         filename=FILENAME)
-
-
-    transform_html_to_csv(path=save_path,
-                          filename=FILENAME)
-
-    pre_process_dataframe(filename=FILENAME, drop=['Cidade', 'UF'])            
+    print(f'Jogo com números menos frequentes: {menos}')          

@@ -33,11 +33,10 @@ class Gambler:
     @staticmethod
     def check_hits(raffle_card, raffle_numbers):
         hits = sum(numbers in raffle_card for numbers in raffle_numbers)
-
         return hits
     
 
-    def check_raffle_cards(self, gamble, raffle_numbers):              
+    def check_gambles(self, gamble, raffle_numbers):              
         for raffle_card in tqdm(gamble, total=self.trials):
             
             hits = self.check_hits(raffle_card, raffle_numbers)            
@@ -74,7 +73,7 @@ class Gambler:
 
         for i, gamble in enumerate(gamble_samples):
             sleep(0.5)          
-            self.check_raffle_cards(gamble, raffle_numbers)
+            self.check_gambles(gamble, raffle_numbers)
 
             if i == 0:
                 
@@ -83,7 +82,10 @@ class Gambler:
                 self.yell()  
                 print()
                 print('-=' * 30, end='\n\n')
-                print("Now, i'll play all the remaining games... Just wait! Thanks.", end='\n\n')
+
+                if self.samples > 1:
+                
+                    print("Now, i'll play all the remaining games... Just wait! Thanks.", end='\n\n')
                 
             
             self.hits.clear()
