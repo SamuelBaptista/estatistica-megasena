@@ -1,5 +1,4 @@
-import random
-
+from random import sample
 from tqdm import tqdm
 from numpy import max
 from time import sleep
@@ -22,8 +21,8 @@ class Gambler:
         self.cheers = False
 
     def gamble(self):
-        return (random.sample(range(1, self.numbers_range+1),
-                              self.numbers_played) for _ in range(self.trials))
+        return (sample(range(1, self.numbers_range+1),
+                       self.numbers_played) for _ in range(self.trials))
          
 
     def gamble_samples(self):   
