@@ -1,11 +1,12 @@
 import random
 
-from tqdm import tqdm
 from numpy import max
-from time import sleep
+
+from threading import Thread
+from threading import Lock
 
 
-class Gambler:
+class GamblerMT:
 
     def __init__(self, numbers_range, numbers_amount, numbers_played, trials, samples):
 
@@ -16,29 +17,34 @@ class Gambler:
         self.trials = trials
         self.samples = samples
 
+        self.lock = Lock()
+
         self.hits = []
         self.hits_list = []
+
+        self.gamble_list = []
+        self.thread_list = []
                 
         self.cheers = False
 
     def gamble(self):
-        return (random.sample(range(1, self.numbers_range+1),
-                              self.numbers_played) for _ in range(self.trials))
-         
 
-    def gamble_samples(self):   
-        return (self.gamble() for _ in range(self.samples))
+        nr = self.numbers_range+1
+        np = self.numbers_played
+        tr = self.trials
+
+        return (random.sample(range(1, nr), np) for _ in range(tr))
 
 
     @staticmethod
     def check_hits(raffle_card, raffle_numbers):
         hits = sum(numbers in raffle_card for numbers in raffle_numbers)
-
         return hits
     
 
-    def check_raffle_cards(self, gamble, raffle_numbers):              
-        for raffle_card in tqdm(gamble, total=self.trials):
+    def check_gambles(self, gamble, raffle_numbers):
+                     
+        for raffle_card in gamble:
             
             hits = self.check_hits(raffle_card, raffle_numbers)            
             self.hits.append(hits)
@@ -70,21 +76,21 @@ class Gambler:
 
     def play(self, raffle_numbers):
 
-        gamble_samples = self.gamble_samples()      
+        for i in range(self.samples):
+            self.gamble_list.append(self.gamble())
+            self.thread_list.append(Thread(target=self.check_gambles, args=(self.gamble_list[i], raffle_numbers)))              
 
-        for i, gamble in enumerate(gamble_samples):
-            sleep(0.5)          
-            self.check_raffle_cards(gamble, raffle_numbers)
+        for thread in self.thread_list:
+            thread.start()
 
-            if i == 0:
-                
-                print()       
-                self.celebrate()
-                self.yell()  
-                print()
-                print('-=' * 30, end='\n\n')
-                print("Now, i'll play all the remaining games... Just wait! Thanks.", end='\n\n')
-                
+        for thread in self.thread_list:
+            thread.join()
+               
+        print()       
+        self.celebrate()
+        self.yell()  
+        print()
+        print('-=' * 30, end='\n\n')                
             
-            self.hits.clear()
-            self.cheers = False
+        self.hits.clear()
+        self.cheers = False
