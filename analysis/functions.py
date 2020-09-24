@@ -6,9 +6,11 @@ import os
 import pandas as pd
 
 
-def get_working_dir_path():
+def get_data_dir():
 
-    return os.getcwd()
+    data_dir = os.path.join(os.getcwd(), 'data')
+
+    return data_dir
 
 
 def download_raffle_file(url, path, filename):
@@ -21,7 +23,7 @@ def download_raffle_file(url, path, filename):
     for f in files:
         if f.endswith('.htm'):   
             z.extract(f, path)
-            os.replace(f, filename)
+            os.replace('data/' + f, 'data/' + filename)
 
 
 def transform_html_to_csv(path, filename):
@@ -37,7 +39,7 @@ def transform_html_to_csv(path, filename):
 
 def pre_process_dataframe(filename, **kwargs):
 
-    csv_file = os.path.splitext(filename)[0] + '.csv'
+    csv_file = 'data/' + os.path.splitext(filename)[0] + '.csv'
 
     dataframe = pd.read_csv(csv_file,
                             index_col='Concurso',

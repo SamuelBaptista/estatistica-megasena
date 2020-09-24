@@ -6,7 +6,7 @@ from threading import Thread
 from threading import Lock
 
 
-class GamblerMT:
+class GamblersClub:
 
     def __init__(self, numbers_range, numbers_amount, numbers_played, trials, samples):
 
@@ -32,7 +32,7 @@ class GamblerMT:
         nr = self.numbers_range+1
         np = self.numbers_played
         tr = self.trials
-
+        
         return (random.sample(range(1, nr), np) for _ in range(tr))
 
 
@@ -43,35 +43,18 @@ class GamblerMT:
     
 
     def check_gambles(self, gamble, raffle_numbers):
+
+        self.lock.acquire()
                      
         for raffle_card in gamble:
             
             hits = self.check_hits(raffle_card, raffle_numbers)            
             self.hits.append(hits)
 
-        self.hits_list.append(self.hits.copy())     
-            
+        self.hits_list.append(self.hits.copy())
+        self.hits.clear()
 
-    def celebrate(self):        
-        if self.numbers_amount in self.hits:
-            self.cheers = True
-
-
-    def yell(self):
-
-        bold = '\033[1m'
-        clear = '\033[m' 
-        
-        if self.cheers:
-
-            print('YAY! We won!')
-            print(f'We hit all the {bold}{self.numbers_amount}{clear} numbers!')
-
-        else:
-
-            print(f"WOW! Even with {bold}{self.trials:,}{clear} trials,", end=' ')
-            print(f"we didn't hit all the {bold}{self.numbers_amount}{clear} numbers!")
-            print(f'Our best game just hit {bold}{max(self.hits)}{clear} numbers!')
+        self.lock.release()     
 
 
     def play(self, raffle_numbers):
@@ -85,12 +68,3 @@ class GamblerMT:
 
         for thread in self.thread_list:
             thread.join()
-               
-        print()       
-        self.celebrate()
-        self.yell()  
-        print()
-        print('-=' * 30, end='\n\n')                
-            
-        self.hits.clear()
-        self.cheers = False
