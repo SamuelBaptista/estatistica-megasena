@@ -1,6 +1,6 @@
 import random
 
-from numpy import max
+from tqdm import tqdm
 
 from threading import Thread
 from threading import Lock
@@ -46,7 +46,7 @@ class GamblersClub:
 
         self.lock.acquire()
                      
-        for raffle_card in gamble:
+        for raffle_card in tqdm(gamble, total=self.trials):
             
             hits = self.check_hits(raffle_card, raffle_numbers)            
             self.hits.append(hits)
@@ -61,7 +61,10 @@ class GamblersClub:
 
         for i in range(self.samples):
             self.gamble_list.append(self.gamble())
-            self.thread_list.append(Thread(target=self.check_gambles, args=(self.gamble_list[i], raffle_numbers)))              
+            
+            self.thread_list.append(Thread(target=self.check_gambles,
+                                           args=(self.gamble_list[i],
+                                                 raffle_numbers)))              
 
         for thread in self.thread_list:
             thread.start()
