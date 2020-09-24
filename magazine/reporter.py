@@ -8,9 +8,13 @@ from numpy import int64
 
 import matplotlib.pyplot as plt
 
-class Reporter:
+from magazine.designer import Designer
+
+class Reporter(Designer):
 
     def __init__(self, numbers_played, gambler_hits=None):
+
+        super().__init__()
 
         self.hits_list = gambler_hits
         self.numbers_played = numbers_played
@@ -22,12 +26,7 @@ class Reporter:
             self.trials = None
         
         self.hits_amount = []
-
-        self.bold = '\033[1m'
-        self.clear = '\033[m'
-        self.urder = '\033[4m'
-        self.red = '\033[31m'
-        
+     
 
     def count_gambler_hits(self):        
         for hits in self.hits_list:           
