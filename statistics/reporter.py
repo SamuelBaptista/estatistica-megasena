@@ -6,7 +6,6 @@ from numpy import load
 from numpy import mean
 from numpy import int64
 
-
 import matplotlib.pyplot as plt
 
 class Reporter:
@@ -23,6 +22,11 @@ class Reporter:
             self.trials = None
         
         self.hits_amount = []
+
+        self.bold = '\033[1m'
+        self.clear = '\033[m'
+        self.urder = '\033[4m'
+        self.red = '\033[31m'
         
 
     def count_gambler_hits(self):        
@@ -67,8 +71,10 @@ class Reporter:
 
         confidence_interval = Series(bootstrap).quantile([down, up]).astype(int64)
 
-        print(f'A quantidade de acertos foi de {confidence_interval[down]}', end= ' ')
-        print(f'até {confidence_interval[up]} considerando {confidence*100}% de confiança')
+        print('A média da quantidade de acertos foi de', end=' ')
+        print(f'{self.red}{self.bold}{confidence_interval[down]}{self.clear}', end= ' ')
+        print(f'até {self.red}{self.bold}{confidence_interval[up]}{self.clear}', end=' ')
+        print(f'considerando {self.bold}{confidence*100:.0f}%{self.clear} de confiança')
 
 
     def hit_report(self, number):
@@ -86,22 +92,20 @@ class Reporter:
         else:              
             chance = self.trials // mean_hits
             
-        bold = '\033[1m'
-        clear = '\033[m'
-        urder = '\033[4m'
         
         print(f'The mean score was approximately', end=' ')
-        print(f'{bold}{mean_hits}{clear} each', end=' ')
-        print(f'{bold}{self.trials:,.0f}{clear} trials:')
+        print(f'{self.bold}{mean_hits}{self.clear} each', end=' ')
+        print(f'{self.bold}{self.trials:,.0f}{self.clear} trials:')
         print()
 
         if chance == 0:
             print('We didnt hit the pot in any raffle! Or almost that...')
         else:
-            print(f'{urder}{bold}1{clear} hit each {urder}{bold}{chance:,.0f}{clear} games played!')
+            print(f'{self.urder}{self.bold}1{self.clear}', end=' ')
+            print(f'hit each {self.urder}{self.bold}{chance:,.0f}{self.clear} games played!')
             
         print()
-        print(f'We have played with {bold}{self.numbers_played}{clear} numbers.')
+        print(f'We have played with {self.bold}{self.numbers_played}{self.clear} numbers.')
 
 
     def save_hits(self):
