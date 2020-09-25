@@ -1,14 +1,14 @@
+from multiprocessing import process
 import random
 
 from tqdm import tqdm
 
-from threading import Thread
-from threading import Lock
+import multiprocessing as mp
 
 
 class GamblersClub:
 
-    def __init__(self, numbers_range, numbers_amount, numbers_played, trials, samples):
+    def __init__(self, numbers_range, numbers_amount, numbers_played, trials, samples, raffle_numbers):
 
         self.numbers_range = numbers_range
         self.numbers_amount = numbers_amount
@@ -17,57 +17,33 @@ class GamblersClub:
         self.trials = trials
         self.samples = samples
 
-        self.lock = Lock()
+        self.raffle_numbers = raffle_numbers
 
-        self.hits = []
-        self.hits_list = []
+        self.gamblers = mp.cpu_count()
 
-        self.gamble_list = []
-        self.thread_list = []
-                
-        self.cheers = False
+        self.hits = None
+        self.hits_list = None
 
-    def gamble(self):
 
+    def gamble(self, trials):
         nr = self.numbers_range+1
         np = self.numbers_played
-        tr = self.trials
         
-        return (random.sample(range(1, nr), np) for _ in range(tr))
+        gamble = random.sample(range(1, nr), np)
+
+        return sum(numbers in gamble for numbers in self.raffle_numbers)
 
 
-    @staticmethod
-    def check_hits(raffle_card, raffle_numbers):
-        hits = sum(numbers in raffle_card for numbers in raffle_numbers)
-        return hits
-    
-
-    def check_gambles(self, gamble, raffle_numbers):
-
-        self.lock.acquire()
-                     
-        for raffle_card in tqdm(gamble, total=self.trials):
-            
-            hits = self.check_hits(raffle_card, raffle_numbers)            
-            self.hits.append(hits)
-
-        self.hits_list.append(self.hits.copy())
-        self.hits.clear()
-
-        self.lock.release()     
+    def check_hits(self):        
+        pool = mp.Pool(processes=self.gamblers) 
+               
+        self.hits = pool.map(self.gamble, range(self.trials))        
+        pool.close()
+        
+        return self.hits
 
 
-    def play(self, raffle_numbers):
-
-        for i in range(self.samples):
-            self.gamble_list.append(self.gamble())
-            
-            self.thread_list.append(Thread(target=self.check_gambles,
-                                           args=(self.gamble_list[i],
-                                                 raffle_numbers)))              
-
-        for thread in self.thread_list:
-            thread.start()
-
-        for thread in self.thread_list:
-            thread.join()
+    def play(self):
+        self.hits_list = [self.check_hits() for _ in range(self.samples)]
+                    
+        

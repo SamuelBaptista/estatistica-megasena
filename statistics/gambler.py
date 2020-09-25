@@ -6,7 +6,7 @@ from time import sleep
 
 class Gambler:
 
-    def __init__(self, numbers_range, numbers_amount, numbers_played, trials, samples):
+    def __init__(self, numbers_range, numbers_amount, numbers_played, trials, samples, raffle_numbers):
 
         self.numbers_range = numbers_range
         self.numbers_amount = numbers_amount
@@ -14,6 +14,8 @@ class Gambler:
         
         self.trials = trials
         self.samples = samples
+
+        self.raffle_numbers = raffle_numbers
 
         self.hits = []
         self.hits_list = []
@@ -29,17 +31,16 @@ class Gambler:
         return (self.gamble() for _ in range(self.samples))
 
 
-    @staticmethod
-    def check_hits(raffle_card, raffle_numbers):
-        hits = sum(numbers in raffle_card for numbers in raffle_numbers)
+    def check_hits(self, raffle_card):
+        hits = sum(numbers in raffle_card for numbers in self.raffle_numbers)
 
         return hits
     
 
-    def check_raffle_cards(self, gamble, raffle_numbers):              
+    def check_raffle_cards(self, gamble):              
         for raffle_card in tqdm(gamble, total=self.trials):
             
-            hits = self.check_hits(raffle_card, raffle_numbers)            
+            hits = self.check_hits(raffle_card)            
             self.hits.append(hits)
 
         self.hits_list.append(self.hits.copy())     
@@ -67,13 +68,13 @@ class Gambler:
             print(f'Our best game just hit {bold}{max(self.hits)}{clear} numbers!')
 
 
-    def play(self, raffle_numbers):
+    def play(self):
 
         gamble_samples = self.gamble_samples()      
 
         for i, gamble in enumerate(gamble_samples):
             sleep(0.5)          
-            self.check_raffle_cards(gamble, raffle_numbers)
+            self.check_raffle_cards(gamble)
 
             if i == 0:
                 
