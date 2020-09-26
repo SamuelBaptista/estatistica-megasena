@@ -118,12 +118,13 @@ class Reporter(Designer):
 
 
     def save_hits(self):
-        save(f'data/{self.trials:_}_trials_{len(self.hits_list):_}_samples.npy', self.hits_list)
+        save(f'data/trials-{self.trials:_}-samples-{len(self.hits_list):_}-numbers-{self.numbers_played}.npy', self.hits_list)
 
 
     def load_hits(self, path):
         self.hits_list = load(path)
         self.trials = len(self.hits_list[0])
+        self.numbers_played = int(path.split('-')[-1].split('.')[0])
 
 
             

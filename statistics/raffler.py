@@ -1,4 +1,5 @@
-import random
+from collections import namedtuple
+from random import sample
 
 
 class Raffler:
@@ -8,8 +9,14 @@ class Raffler:
         self.numbers_range = numbers_range
         self.numbers_amount = numbers_amount
 
+        self.raffle_numbers = None
 
+        self.run()
+        
     def run(self):
+        nr = self.numbers_range+1
+        n = self.numbers_amount
 
-       return random.sample(range(1, self.numbers_range+1),
-                            self.numbers_amount)
+        self.raffle_numbers = sample(range(1, nr), n)
+
+        return self.raffle_numbers

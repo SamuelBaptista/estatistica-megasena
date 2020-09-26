@@ -1,10 +1,11 @@
 import random
 import multiprocessing as mp
 
+from statistics.raffler import Raffler
 
-class GamblersClub:
+class GamblersClub(Raffler):
 
-    def __init__(self, numbers_range, numbers_amount, numbers_played, trials, players, raffle_numbers):
+    def __init__(self, numbers_range, numbers_amount, numbers_played, trials, players):
 
         self.numbers_range = numbers_range
         self.numbers_amount = numbers_amount
@@ -13,12 +14,12 @@ class GamblersClub:
         self.trials = trials
         self.players = players
 
-        self.raffle_numbers = raffle_numbers
-
         self.gamblers = mp.cpu_count()
 
         self.hits = None
         self.hits_list = None
+
+        super().__init__(self.numbers_range, self.numbers_amount)
 
 
     def gamble(self, _):

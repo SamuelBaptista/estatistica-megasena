@@ -1,23 +1,24 @@
 from random import sample
 from tqdm import tqdm
 from numpy import max
-from time import sleep
 
+from statistics.raffler import Raffler
 
-class Gambler:
+class Gambler(Raffler):
 
-    def __init__(self, numbers_range, numbers_amount, numbers_played, trials, raffle_numbers):
+    def __init__(self, numbers_range, numbers_amount, numbers_played, trials):
 
         self.numbers_range = numbers_range
         self.numbers_amount = numbers_amount
         self.numbers_played = numbers_played
        
         self.trials = trials
-        self.raffle_numbers = raffle_numbers
 
         self.hits = None
         self.numbers = None               
         self.cheers = False
+
+        super().__init__(self.numbers_range, self.numbers_amount)
 
     def gamble(self):
         nr = self.numbers_range+1
