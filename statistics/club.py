@@ -1,21 +1,17 @@
-from multiprocessing import process
 import random
-
-from tqdm import tqdm
-
 import multiprocessing as mp
 
 
 class GamblersClub:
 
-    def __init__(self, numbers_range, numbers_amount, numbers_played, trials, samples, raffle_numbers):
+    def __init__(self, numbers_range, numbers_amount, numbers_played, trials, players, raffle_numbers):
 
         self.numbers_range = numbers_range
         self.numbers_amount = numbers_amount
         self.numbers_played = numbers_played
         
         self.trials = trials
-        self.samples = samples
+        self.players = players
 
         self.raffle_numbers = raffle_numbers
 
@@ -25,7 +21,7 @@ class GamblersClub:
         self.hits_list = None
 
 
-    def gamble(self, trials):
+    def gamble(self, _):
         nr = self.numbers_range+1
         np = self.numbers_played
         
@@ -44,6 +40,6 @@ class GamblersClub:
 
 
     def play(self):
-        self.hits_list = [self.check_hits() for _ in range(self.samples)]
+        self.hits_list = [self.check_hits() for _ in range(self.players)]
                     
         
