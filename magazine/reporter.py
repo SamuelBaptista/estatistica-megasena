@@ -1,4 +1,4 @@
-from pandas import Series
+from pandas import Series, read_csv
 from collections import Counter
 
 from numpy import save
@@ -12,12 +12,14 @@ from magazine.designer import Designer
 
 class Reporter(Designer):
 
-    def __init__(self, numbers_played, gambler_hits=None):
+    def __init__(self, numbers_played=None, gambler_hits=None):
 
         super().__init__()
 
         self.hits_list = gambler_hits
         self.numbers_played = numbers_played
+
+        self.dataframe = read_csv('data/probabilities.csv', sep=';')
 
         if not self.hits_list == None:
             self.trials = len(self.hits_list[0])
@@ -46,14 +48,18 @@ class Reporter(Designer):
         return number_list
 
     @staticmethod
-    def show_probabilities_table():
-        prob_table = plt.imread("data/probabilities_table.png")
+    def show_probabilities_image():
+        prob_table = plt.imread("data/probabilities.png")
         plt.figure(figsize=(10,10))
         plt.axis('off')
         plt.tight_layout()        
         plt.imshow(prob_table)
 
-        
+    
+    def show_probabilities_dataframe(self):      
+        print(self.dataframe)
+
+       
     def confidence_report(self, number, confidence):
 
         if confidence > 1:
@@ -98,13 +104,17 @@ class Reporter(Designer):
         print()
 
         if chance == 0:
-            print('We didnt hit the pot in any raffle! Or almost that...')
+            print('We didnt hit the pot in any raffle! Or almost that...', end='\n')
         else:
-            print(f'{self.urder}{self.bold}1{self.clear}', end=' ')
-            print(f'hit each {self.urder}{self.bold}{chance:,.0f}{self.clear} games played!')
+            print(f'1', end=' ')
+            print(f'hit each {self.urder}{self.bold}{chance:,.0f}{self.clear} games played!', end='\n')
             
-        print()
-        print(f'We have played with {self.bold}{self.numbers_played}{self.clear} numbers.')
+        
+        print(f'We have played with {self.bold}{self.numbers_played}{self.clear} numbers.', end='\n\n')
+
+        print(f'the raffler says: {self.urder}{self.bold}{self.dataframe.loc[self.dataframe.Numeros == self.numbers_played, str(number)].values[0]:,}{self.clear}')
+        print(f'What do you think?')
+        
 
 
     def save_hits(self):
