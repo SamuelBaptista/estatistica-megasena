@@ -118,7 +118,7 @@ class Reporter(Designer):
 
 
     def save_hits(self):
-        save(f'data/trials-{self.trials:_}-samples-{len(self.hits_list):_}-numbers-{self.numbers_played}.npy', self.hits_list)
+        save(f'samples/trials-{self.trials:_}-samples-{len(self.hits_list):_}-numbers-{self.numbers_played}.npy', self.hits_list)
 
 
     def load_hits(self, path):
