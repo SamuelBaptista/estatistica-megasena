@@ -50,7 +50,7 @@ class Gambler(Raffler):
 
         else:
 
-            print(f"That´s SAD! We tried {bold}{self.trials:,}{clear} time(s), but,", end=' ')
+            print(f"That´s SAD! We tried {bold}{self.trials:,}{clear} time(s), but", end=' ')
             print(f"we didn't hit all the {bold}{self.numbers_amount}{clear} numbers!")
             print(f'Our best game just hit {bold}{max(self.hits)}{clear} number(s)!')
 

@@ -7,6 +7,7 @@ from numpy import mean
 from numpy import int64
 
 import matplotlib.pyplot as plt
+import joblib
 
 from magazine.designer import Designer
 
@@ -118,11 +119,11 @@ class Reporter(Designer):
 
 
     def save_hits(self):
-        save(f'samples/trials-{self.trials:_}-samples-{len(self.hits_list):_}-numbers-{self.numbers_played}.npy', self.hits_list)
+        joblib.dump(self.hits_list, f'samples/trials-{self.trials:_}-samples-{len(self.hits_list):_}-numbers-{self.numbers_played}.pkl', compress=3)
 
 
     def load_hits(self, path):
-        self.hits_list = load(path)
+        self.hits_list = joblib.load(path)
         self.trials = len(self.hits_list[0])
         self.numbers_played = int(path.split('-')[-1].split('.')[0])
 
