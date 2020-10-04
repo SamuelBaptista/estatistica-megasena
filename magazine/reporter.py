@@ -51,7 +51,7 @@ class Reporter(Designer):
     @staticmethod
     def show_probabilities_image():
         prob_table = plt.imread("data/probabilities.png")
-        plt.figure(figsize=(10,10))
+        plt.figure(figsize=(7.5, 7.5))
         plt.axis('off')
         plt.tight_layout()        
         plt.imshow(prob_table)
@@ -72,7 +72,7 @@ class Reporter(Designer):
         bootstrap = []        
         series = Series(self.get_number_info(number))
 
-        for _ in range(10000):
+        for _ in range(100):
             bootstrap.append(int(series.sample(frac=1, replace=True).mean()))
 
         confidence_interval = Series(bootstrap).quantile([down, up]).astype(int64)
@@ -88,7 +88,7 @@ class Reporter(Designer):
         bootstrap = []
         series = Series(self.get_number_info(number))
 
-        for _ in range(10000):
+        for _ in range(100):
             bootstrap.append(series.sample(frac=1, replace=True).mean())
 
         mean_hits = int(mean(bootstrap))
@@ -100,7 +100,7 @@ class Reporter(Designer):
             
         
         print(f'The mean score was approximately', end=' ')
-        print(f'{self.bold}{mean_hits}{self.clear} each', end=' ')
+        print(f'{self.bold}{mean_hits:,.0f}{self.clear} each', end=' ')
         print(f'{self.bold}{self.trials:,.0f}{self.clear} trials:')
         print()
 
@@ -114,7 +114,6 @@ class Reporter(Designer):
         print(f'We have played with {self.bold}{self.numbers_played}{self.clear} numbers.', end='\n\n')
 
         print(f'the raffler says: {self.urder}{self.bold}{self.dataframe.loc[self.dataframe.Numeros == self.numbers_played, str(number)].values[0]:,}{self.clear}')
-        print(f'What do you think?')
         
 
 
