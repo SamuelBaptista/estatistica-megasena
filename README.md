@@ -1,6 +1,5 @@
 # estatistica-megasena
 Análise estatística dos números da Megasena.
 
-you can access the notebook with the project here:
-
+você pode acessar o notebook com o projeto aqui:
 https://samuelbaptista.github.io/estatistica-megasena/
